@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:44:56 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/17 17:44:45 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:01:26 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void error_handel(char *av)
 	cheack_empty(av);
 	map_rectangular(av);
 	map_wall_main(av);
-	count_e_s_c(av);
+	count_e_p_c(av);
+	
 
 }
 

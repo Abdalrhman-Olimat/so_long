@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:09:53 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/17 17:45:10 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/17 17:59:04 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	map_rectangular(char *av)
 	free(line);
 	close(fd);
 }
-void process_lines_e_s_c(int fd, int length, int *e, int *s, int *c, int *o)
+void process_lines_e_p_c(int fd, int length, int *e, int *p, int *c, int *o)
 {
     int i;
     char *line;
@@ -50,11 +50,11 @@ void process_lines_e_s_c(int fd, int length, int *e, int *s, int *c, int *o)
 		{
 			if (line[i] == 'E')
 				(*e)++;
-			else if (line[i] == 'S')
-				(*s)++;
+			else if (line[i] == 'P')
+				(*p)++;
 			else if (line[i] == 'C')
 				(*c)++;
-			else if (line[i] != 'E' && line[i] != 'S' && line[i] != 'C' && line[i] != 'D' && line[i] != '0' && line[i] != '1')
+			else if (line[i] != 'E' && line[i] != 'P' && line[i] != 'C' && line[i] != 'D' && line[i] != '0' && line[i] != '1')
 				(*o)++;
 			i++;
 		}
@@ -62,30 +62,30 @@ void process_lines_e_s_c(int fd, int length, int *e, int *s, int *c, int *o)
     }
 }
 
-void count_e_s_c(char *av)
+void count_e_p_c(char *av)
 {
 	int	fd;
 	int	length;
 	int	e_count;
-	int	s_count;
+	int	p_count;
 	int	c_count;
 	int	i;
 	int	o_count;
 	char		*line;
 
 	e_count = 0;
-	s_count = 0;
+	p_count = 0;
 	c_count = 0;
 	o_count = 0;
 	fd = open(av,O_RDONLY);
 	line = get_next_line(fd);
 	length = ft_strlen(line);
 	free(line);
-	process_lines_e_s_c(fd, length, &e_count, &s_count, &c_count, &o_count);
+	process_lines_e_p_c(fd, length, &e_count, &p_count, &c_count, &o_count);
 	close(fd);
-	if(e_count!= 1 || s_count!= 1 || c_count <= 0 || o_count != 0)
+	if(e_count!= 1 || p_count!= 1 || c_count <= 0 || o_count != 0)
 	{
-		write(2,"Error: there should be exactly one 'E' and one 'S' and at least one 'C' and nothing else\n",88);
+		write(2,"Error: there should be exactly one 'E' and one 'p' and at least one 'C' and nothing else\n",88);
 		exit(1);
 	}
 }
