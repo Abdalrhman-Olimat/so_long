@@ -9,7 +9,8 @@
 /*   Updated: 2024/09/18 12:44:53 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "so_long.h"
+
+#include "include/so_long.h"
 
 static char	*ft_read(int fd, char *save)
 {

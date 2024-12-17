@@ -1,33 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   file_error.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/17 15:44:56 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/17 17:44:45 by aeleimat         ###   ########.fr       */
+/*   Created: 2024/12/17 17:03:03 by aeleimat          #+#    #+#             */
+/*   Updated: 2024/12/17 17:32:35 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/so_long.h"
+# ifndef FILE_ERROR_H
+# define FILE_ERROR_H
+# include "so_long.h"
+void	cheack_name(char *av);
+void	cheack_empty(char *av);
 
-void error_handel(char *av)
-{
-	cheack_name(av);
-	cheack_empty(av);
-	map_rectangular(av);
-	map_wall_main(av);
-	count_e_s_c(av);
-
-}
-
-int	main(int ac,char **av)
-{
-	if (ac != 2)
-	{
-		write(2, "Error1\n", 7);
-		return (0);
-	}
-	error_handel(av[1]);
-}
+#endif
