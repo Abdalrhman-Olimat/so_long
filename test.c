@@ -69,14 +69,24 @@ void map_rectangular(char *av)
     free(line);
     close(fd);
 }
-void map_wall(char *av)
+void map_wall_side(char *line, int length, int *flag)
+{
+    if(line[0] != '1' || line[length - 2] != '1')
+        {
+            write(2,"side wall is wrong\n",18);
+            *flag = 1;
+        }
+}
+void map_wall_main(char *av)
 {
     int fd;
     int i;
     int length;
+    int flag;
     char    *line;
 
     i = -1;
+    flag = 0;
     fd = open(av,O_RDONLY);
     line = get_next_line(fd);
     length = ft_strlen(line);
@@ -84,34 +94,27 @@ void map_wall(char *av)
         if(line[i] != '1')
         {
             write(2,"up wall is wrong\n",17);
-            free(line);
-            exit(0);
+            flag = 1;
         }
     free(line);
     while((line = get_next_line(fd)) != NULL)
     {
-        if(line[0] != '1' || line[length - 2] != '1')
-        {
-            printf("%d\n",line[0]);
-            printf("%d\n",line[length - 2]);
-            write(2,"side wall is wrong\n",18);
-            free(line);
-            close(fd);
-            exit(0);
-        }
+        map_wall_side(line ,length ,&flag);
         free(line);
     }
+    printf("%d",line[1])
     free(line);
     close(fd);
-
-}/////////////////////////////////////////////////////////////////////////// fix botom row and error one malloc from cut the line 
+    if (flag == 1)
+        exit(0);
+}
 
 void error_handel(char *av)
 {
     cheack_name(av);
     cheack_empty(av);
     map_rectangular(av);
-    map_wall(av);
+    map_wall_main(av);
 }
 int main (int ac,char **av)
 {
