@@ -69,6 +69,18 @@ void map_rectangular(char *av)
     free(line);
     close(fd);
 }
+void check_up_wall(char *line, int length, int *flag)
+{
+    for (int i = 0; i < length - 1; i++)
+    {
+        if (line[i] != '1')
+        {
+            write(2, "up wall is wrong\n", 17);
+            *flag = 1;
+            break;
+        }
+    }
+}
 void map_wall_side(char *line, int length, int *flag)
 {
     if(line[0] != '1' || line[length - 2] != '1')
@@ -90,55 +102,39 @@ void map_wall_bottom(char *line, int length, int *flag)
         }
     }
 }
+void process_lines(int fd, int length, int *flag)
+{
+    char *line, *last_line = NULL;
+
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        if (last_line)
+            free(last_line);
+        last_line = line;
+        map_wall_side(line, length, flag);
+    }
+    if (last_line)
+    {
+        map_wall_bottom(last_line, length, flag);
+        free(last_line);
+    }
+}
 
 void map_wall_main(char *av)
 {
-    int fd;
-    int i;
-    int length;
-    int flag;
+    int fd, length, flag = 0;
     char *line;
-    char *last_line = NULL;
 
-    i = -1;
-    flag = 0;
     fd = open(av, O_RDONLY);
-    if (fd < 0)
-    {
-        write(2, "Error opening file\n", 19);
-        exit(1);
-    }
     line = get_next_line(fd);
-    if (line == NULL)
-    {
-        write(2, "Error reading file\n", 19);
-        close(fd);
-        exit(1);
-    }
+    if (!line)
+        exit(write(2, "Error reading file\n", 19));
     length = ft_strlen(line);
-    while (++i < length - 1)
-    {
-        if (line[i] != '1')
-        {
-            write(2, "up wall is wrong\n", 17);
-            flag = 1;
-        }
-    }
+    check_up_wall(line, length, &flag);
     free(line);
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        if (last_line != NULL)
-            free(last_line);
-        last_line = line;
-        map_wall_side(line, length, &flag);
-    }
-    if (last_line != NULL)
-    {
-        map_wall_bottom(last_line, length, &flag);
-        free(last_line);
-    }
+    process_lines(fd, length, &flag);
     close(fd);
-    if (flag == 1)
+    if (flag)
         exit(0);
 }
 void error_handel(char *av)
@@ -189,3 +185,53 @@ int main (int ac,char **av)
 //     if (flag == 1)
 //         exit(0);
 // }
+// void map_wall_main(char *av)
+// {
+//     int fd;
+//     int i;
+//     int length;
+//     int flag;
+//     char *line;
+//     char *last_line = NULL;
+
+//     i = -1;
+//     flag = 0;
+//     fd = open(av, O_RDONLY);
+//     if (fd < 0)
+//     {
+//         write(2, "Error opening file\n", 19);
+//         exit(1);
+//     }
+//     line = get_next_line(fd);
+//     if (line == NULL)
+//     {
+//         write(2, "Error reading file\n", 19);
+//         close(fd);
+//         exit(1);
+//     }
+//     length = ft_strlen(line);
+//     while (++i < length - 1)
+//     {
+//         if (line[i] != '1')
+//         {
+//             write(2, "up wall is wrong\n", 17);
+//             flag = 1;
+//         }
+//     }
+//     free(line);
+//     while ((line = get_next_line(fd)) != NULL)
+//     {
+//         if (last_line != NULL)
+//             free(last_line);
+//         last_line = line;
+//         map_wall_side(line, length, &flag);
+//     }
+//     if (last_line != NULL)
+//     {
+//         map_wall_bottom(last_line, length, &flag);
+//         free(last_line);
+//     }
+//     close(fd);
+//     if (flag == 1)
+//         exit(0);
+//}
