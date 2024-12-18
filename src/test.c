@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:44:56 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/18 08:27:56 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/18 08:29:43 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,5 @@ int main(int ac, char **av)
         return (0);
     }
     error_handel(av[1], data);
-    printf("abd\n");
-    
     return (0);
 }
