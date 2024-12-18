@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 07:05:09 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/18 08:26:41 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/18 12:49:59 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ void	flood_fill(char **map, int x, int y, int *collectibles, int *exit_found)
 		flood_fill(map, x, y + 1, collectibles, exit_found);
 }
 
-int check_path(char **map, int height, int width, int player_x, int player_y, int total_collectibles)
+int check_path(char **map, int height, int width, int player_x, int player_y, int collectibles)
 {
-    int exit_found = 0;
-    int collectibles = total_collectibles; // Initialize local collectibles
+    int exit_found;
     char **map_copy;
 
+	exit_found = 0;
     map_copy = copy_map(map, height);
     flood_fill(map_copy, player_x, player_y, &collectibles, &exit_found);
     free_map(map_copy, height);

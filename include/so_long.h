@@ -17,6 +17,7 @@
 # include <fcntl.h>
 # include "/home/abdalrhman/so_long/Libft/libft.h"
 
+#define TILE_SIZE 36
 typedef struct s_map
 {
     char **map;
@@ -26,6 +27,32 @@ typedef struct s_map
     int player_y;
     int collectibles;
 } t_map;
+
+typedef struct s_game
+{
+    void    *mlx;
+    void    *win;
+    t_map   map;
+    void    *img_wall;
+    void    *img_floor;
+    void    *img_player;
+    void    *img_collectible;
+    void    *img_exit;
+} t_game;
+
+// Function prototypes
+void    init_game(t_game *game);
+void    init_images(t_game *game);
+void    render_map(t_game *game);
+void    cleanup_game(t_game *game);
+int     handle_keypress(int keysym, t_game *game);
+int     handle_close(t_game *game);
+int     game_loop(t_game *game);
+void    move_player(t_game *game, int dx, int dy);
+
+void    free_map(char **map, int height);
+int     load_map(char *filename, t_map *data);
+int     check_path(char **map, int height, int width, int player_x, int player_y, int total_collectibles);
 
 # include "file_error.h"
 # include "map_error.h"
