@@ -15,24 +15,21 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <fcntl.h>
-# include "/home/abdalrhman/test/Libft/libft.h"
+# include "/home/abdalrhman/so_long/Libft/libft.h"
+
+typedef struct s_map
+{
+    char **map;
+    int width;
+    int height;
+    int player_x;
+    int player_y;
+    int collectibles;
+} t_map;
+
 # include "file_error.h"
 # include "map_error.h"
 
-# define UP_KEY 65362
-typedef struct s_game_data {
-    void    *mlx_ptr;
-    void    *win_ptr;
-    void    *img_ptr;
-    char    *img_data;
-    int        width;
-    int        height;
-    int        x;
-    int        y;
-    int        *map;
-    int        player_x;
-    int        player_y;
-}                t_game_data;
 
 char	*ft_strjoin2(char *s1, char *s2);
 int		ft_strlen2(char *str);
