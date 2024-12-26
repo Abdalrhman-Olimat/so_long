@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:25:51 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/18 08:24:48 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/23 22:14:05 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ void	flood_fill(char **map, int x, int y, int *collectibles, int *exit_found);
 void	free_map(char **map, int height);
 char	**copy_map(char **map, int height);
 int load_map(char *filename, t_map *data);
+//int load_map2(char *filename, t_game *game);
 
 # endif
