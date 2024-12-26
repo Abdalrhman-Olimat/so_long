@@ -8,7 +8,7 @@
 # define TILE_SIZE 65
 # define NUM_COLLECTIBLE_FRAMES 6 // Number of frames for the collectible animation
 # define FRAME_DELAY 33 // Number of game loop iterations per frame change
-# define ENEMY_MOVE_DELAY 100 // Number of game loop iterations per enemy move
+# define ENEMY_MOVE_DELAY 30 // Number of game loop iterations per enemy move
 # define MAX_ENEMIES 10000 // Maximum number of enemies
 
 # include <fcntl.h>

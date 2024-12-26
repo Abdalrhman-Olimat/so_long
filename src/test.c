@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:44:56 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/26 13:50:11 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:09:18 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,15 +309,22 @@ void cleanup_game(t_game *game)
             game->img_collectibles[i] = NULL;
         }
     }
+    if (game->img_enemy)
+    {
+        mlx_destroy_image(game->mlx, game->img_enemy);
+        game->img_enemy = NULL;
+    }
     if (game->win)
     {
         mlx_destroy_window(game->mlx, game->win);
         game->win = NULL;
     }
+#ifdef __linux__
     if (game->mlx)
     {
         mlx_destroy_display(game->mlx);
     }
+#endif
     if (game->mlx)
     {
         free(game->mlx);
