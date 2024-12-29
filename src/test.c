@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:44:56 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/26 15:09:18 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/29 10:07:49 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,22 +261,27 @@ void move_enemies(t_game *game)
         }
 
         // Check if another enemy is already in the new position
+        int skip_move = 0; // Flag to determine if we should skip
         for (int j = 0; j < game->num_enemies; j++)
         {
             if (j != i && game->enemies[j].x == new_x && game->enemies[j].y == new_y)
-                goto skip_move; // Prevent multiple enemies from occupying the same space
+            {
+                skip_move = 1;
+                break; // Exit the loop once a collision is found
+            }
         }
+
+        if (skip_move)
+            continue;
 
         // Update enemy position on the map
         game->map.map[game->enemies[i].y][game->enemies[i].x] = '0'; // Clear old position
         game->map.map[new_y][new_x] = 'D'; // Set new position
         game->enemies[i].x = new_x;
         game->enemies[i].y = new_y;
-
-    skip_move:
-        ; // Label target for goto, no operation
     }
 }
+
 
 // Clean up resources
 void cleanup_game(t_game *game)
@@ -319,12 +324,12 @@ void cleanup_game(t_game *game)
         mlx_destroy_window(game->mlx, game->win);
         game->win = NULL;
     }
-#ifdef __linux__
+//#ifdef __linux__
     if (game->mlx)
     {
         mlx_destroy_display(game->mlx);
     }
-#endif
+//#endif
     if (game->mlx)
     {
         free(game->mlx);
@@ -374,68 +379,78 @@ int game_loop(t_game *game)
     return (0);
 }
 
-// Load map function
 int load_map2(char *filename, t_game *game)
 {
-    int fd;
-    int row;
-    char *line;
-
-    fd = open(filename, O_RDONLY);
+    int fd = open(filename, O_RDONLY);
     if (fd < 0)
         return (0);
+
     game->map.height = 0;
+    game->map.width = 0;
     game->map.map = NULL;
-    row = 0;
-    while ((line = get_next_line(fd)) != NULL)
+
+    while (1)
     {
-        char **tmp = (char **)malloc(sizeof(char *) * (row + 2));
-        for (int k = 0; k < row; k++)
-            tmp[k] = game->map.map[k];
-        tmp[row] = line;
-        tmp[row + 1] = NULL;
+        char *line = get_next_line(fd);
+        if (!line)
+            break;
+
+        // Remove trailing newline
+        int len = ft_strlen2(line);
+        if (len > 0 && line[len - 1] == '\n')
+        {
+            line[len - 1] = '\0';
+            len--;
+        }
+        // Track max width
+        if (len > game->map.width)
+            game->map.width = len;
+
+        // Append new line to the map array
+        char **tmp = malloc(sizeof(char *) * (game->map.height + 2));
+        for (int i = 0; i < game->map.height; i++)
+            tmp[i] = game->map.map[i];
+        tmp[game->map.height] = line;
+        tmp[game->map.height + 1] = NULL;
+
         free(game->map.map);
         game->map.map = tmp;
-        row++;
+        game->map.height++;
     }
-    game->map.height = row;
     close(fd);
 
-    if (row == 0)
+    if (game->map.height == 0)
         return (0);
 
-    game->map.width = 0;
-    if (game->map.map[0])
-        game->map.width = ft_strlen2(game->map.map[0]);
-
+    // Initialize counters
     game->map.collectibles = 0;
     game->map.player_x = -1;
     game->map.player_y = -1;
     game->num_enemies = 0;
 
-    for (int i = 0; i < game->map.height; i++)
+    // Scan map for objects
+    for (int y = 0; y < game->map.height; y++)
     {
-        for (int j = 0; j < game->map.width; j++)
+        for (int x = 0; x < game->map.width; x++)
         {
-            if (game->map.map[i][j] == 'P')
+            char c = game->map.map[y][x];
+            if (c == 'P')
             {
-                game->map.player_x = j;
-                game->map.player_y = i;
+                game->map.player_x = x;
+                game->map.player_y = y;
             }
-            else if (game->map.map[i][j] == 'C')
+            else if (c == 'C')
                 game->map.collectibles++;
-            else if (game->map.map[i][j] == 'D' && game->num_enemies < MAX_ENEMIES)
+            else if (c == 'D' && game->num_enemies < MAX_ENEMIES)
             {
-                game->enemies[game->num_enemies].x = j;
-                game->enemies[game->num_enemies].y = i;
+                game->enemies[game->num_enemies].x = x;
+                game->enemies[game->num_enemies].y = y;
                 game->num_enemies++;
             }
         }
     }
-
     return (1);
 }
-
 void error_handel(char *av, t_map *data)
 {
     int i;
