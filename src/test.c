@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:44:56 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/30 10:21:36 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:13:00 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,6 @@ void render_map(t_game *game)
     mlx_string_put(game->mlx, game->win, 10, 10, 0xFF0000, moves_str);
     free(moves_str);
 }
-
 // Handle key presses
 int handle_keypress(int keysym, t_game *game)
 {
@@ -145,55 +144,53 @@ int handle_keypress(int keysym, t_game *game)
         cleanup_game(game);
         exit(0);
     }
-    if (keysym == XK_w || keysym == XK_W)
+    if (keysym == XK_w || keysym == XK_W || keysym == XK_Up)
         move_player(game, 0, -1);
-    else if (keysym == XK_s || keysym == XK_S)
+    else if (keysym == XK_s || keysym == XK_S || keysym == XK_Down)
         move_player(game, 0, 1);
-    else if (keysym == XK_a || keysym == XK_A)
+    else if (keysym == XK_a || keysym == XK_A || keysym == XK_Left)
         move_player(game, -1, 0);
-    else if (keysym == XK_d || keysym == XK_D)
+    else if (keysym == XK_d || keysym == XK_D || keysym == XK_Right)
         move_player(game, 1, 0);
     return (0);
+}
+void print_on_terminal(t_game *game)
+{
+	char *move_str;
+	
+	move_str = ft_itoa(game->move_count);
+	write(1, "Moves: ", 7);
+	write(1, move_str, ft_strlen(move_str));
+	write(1, "\n", 1);
+	free(move_str);
 }
 
 // Move player function
 void move_player(t_game *game, int dx, int dy)
 {
-    int new_x = game->map.player_x + dx; // Correctly update x with dx
-    int new_y = game->map.player_y + dy; // Correctly update y with dy
+    int new_x;
+    int new_y;
 
-    // Boundary Checks
-    if (new_x < 0 || new_x >= game->map.width ||
-        new_y < 0 || new_y >= game->map.height)
-        return;
-
-    // Check for wall collision
+	new_x = game->map.player_x + dx;
+	new_y = game->map.player_y + dy;	
     if (game->map.map[new_y][new_x] == '1')
         return;
-
-    // Check for exit without all collectibles
     if (game->map.map[new_y][new_x] == 'E' && game->map.collectibles > 0)
     {
         write(1, "Collect all collectibles before exiting!\n", 41);
         return;
     }
-
-    // Check for exit with all collectibles collected
     if (game->map.map[new_y][new_x] == 'E' && game->map.collectibles == 0)
     {
         write(1, "You win!\n", 9);
         cleanup_game(game);
         exit(0);
     }
-
-    // Collect collectible
     if (game->map.map[new_y][new_x] == 'C')
     {
         game->map.collectibles--;
         game->map.map[new_y][new_x] = '0';
     }
-
-    // Check for collision with enemies
     for (int i = 0; i < game->num_enemies; i++)
     {
         if (new_x == game->enemies[i].x && new_y == game->enemies[i].y)
@@ -203,82 +200,87 @@ void move_player(t_game *game, int dx, int dy)
             exit(0);
         }
     }
-
-    // Update player position on the map
-    game->map.map[game->map.player_y][game->map.player_x] = '0'; // Clear old position
-    game->map.map[new_y][new_x] = 'P'; // Set new position
+    game->map.map[game->map.player_y][game->map.player_x] = '0';
+    game->map.map[new_y][new_x] = 'P';
     game->map.player_x = new_x;
     game->map.player_y = new_y;
-
-    // Update the move counter each time the player moves
     game->move_count++;
-    dprintf(1, "Moves: %d\n", game->move_count);
-
-    // Render updated map
+	print_on_terminal(game);
     render_map(game);
 }
 
-// Move enemies function
+int	is_valid_enemy_move(t_game *game, int new_x, int new_y, int enemy_index)
+{
+    if (new_x < 0 || new_x >= game->map.width ||
+        new_y < 0 || new_y >= game->map.height)
+        return 0;
+    if (game->map.map[new_y][new_x] == '1' ||
+        game->map.map[new_y][new_x] == 'C' ||
+        game->map.map[new_y][new_x] == 'E')
+        return 0;
+    if (new_x == game->map.player_x && new_y == game->map.player_y)
+    {
+        write(1, "You were caught by an enemy!\n", 29);
+        cleanup_game(game);
+        exit(0);
+    }
+    int j;
+	
+	j = 0;
+    while (j < game->num_enemies)
+    {
+        if (j != enemy_index && game->enemies[j].x == new_x && game->enemies[j].y == new_y)
+            return 0;
+        j++;
+    }
+    return 1;
+}
+
+void calculate_enemy_move(int *dx, int *dy)
+{
+    int direction;
+	
+	direction = rand() % 4;
+    *dx = 0;
+    *dy = 0;
+    if (direction == 0)
+        *dx = 1;
+    else if (direction == 1)
+        *dx = -1;
+    else if (direction == 2)
+        *dy = 1;
+    else if (direction == 3)
+        *dy = -1;
+}
+
 void move_enemies(t_game *game)
 {
-    for (int i = 0; i < game->num_enemies; i++)
+    int i = 0;
+    while (i < game->num_enemies)
     {
-        int dx = 0;
-        int dy = 0;
-        int direction = rand() % 4;
-
-        if (direction == 0)
-            dx = 1;  // Move right
-        else if (direction == 1)
-            dx = -1; // Move left
-        else if (direction == 2)
-            dy = 1;  // Move down
-        else if (direction == 3)
-            dy = -1; // Move up
-
-        int new_x = game->enemies[i].x + dx;
-        int new_y = game->enemies[i].y + dy;
-
-        // Boundary Checks
-        if (new_x < 0 || new_x >= game->map.width ||
-            new_y < 0 || new_y >= game->map.height)
-            continue;
-
-        // Check for wall, collectible, or exit collision
-        if (game->map.map[new_y][new_x] == '1' ||
-            game->map.map[new_y][new_x] == 'C' ||
-            game->map.map[new_y][new_x] == 'E')
-            continue;
-
-        // Check for collision with player
-        if (new_x == game->map.player_x && new_y == game->map.player_y)
+        int dx, dy;
+        calculate_enemy_move(&dx, &dy);
+        int new_x;
+        int new_y;
+		
+		new_x = game->enemies[i].x + dx;
+		new_y = game->enemies[i].y + dy;
+        if (!is_valid_enemy_move(game, new_x, new_y, i))
         {
-            write(1, "You were caught by an enemy!\n", 29);
-            cleanup_game(game);
-            exit(0);
-        }
-
-        // Check if another enemy is already in the new position
-        int skip_move = 0; // Flag to determine if we should skip
-        for (int j = 0; j < game->num_enemies; j++)
-        {
-            if (j != i && game->enemies[j].x == new_x && game->enemies[j].y == new_y)
-            {
-                skip_move = 1;
-                break; // Exit the loop once a collision is found
-            }
-        }
-
-        if (skip_move)
+            i++;
             continue;
-
-        // Update enemy position on the map
-        game->map.map[game->enemies[i].y][game->enemies[i].x] = '0'; // Clear old position
-        game->map.map[new_y][new_x] = 'D'; // Set new position
+        }
+        game->map.map[game->enemies[i].y][game->enemies[i].x] = '0';
+        game->map.map[new_y][new_x] = 'D';
         game->enemies[i].x = new_x;
         game->enemies[i].y = new_y;
+
+        i++;
     }
 }
+
+
+
 
 // Clean up resources
 void cleanup_game(t_game *game)
