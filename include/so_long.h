@@ -62,7 +62,7 @@ void cleanup_game(t_game *game);
 int  handle_keypress(int keysym, t_game *game);
 int  handle_close(t_game *game);
 int  game_loop(t_game *game);
-void move_player(t_game *game, int dx, int dy);
+void move_player(t_game *game, int dx, int dy,int i);
 void move_enemies(t_game *game);
 int  load_map2(char *filename, t_game *game);
 int  check_path(char **map, int height, int width, int px, int py, int total);

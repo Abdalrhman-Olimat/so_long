@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:44:56 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/30 11:13:00 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:54:05 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,6 @@ void render_map(t_game *game)
     }
     i = 0;
         draw_enemies(game);
-
     moves_str = ft_itoa(game->move_count);
     mlx_string_put(game->mlx, game->win, 10, 10, 0xFF0000, moves_str);
     free(moves_str);
@@ -139,19 +138,22 @@ void render_map(t_game *game)
 // Handle key presses
 int handle_keypress(int keysym, t_game *game)
 {
+	int i;
+	
+	i = 0;
     if (keysym == XK_Escape)
     {
         cleanup_game(game);
         exit(0);
     }
     if (keysym == XK_w || keysym == XK_W || keysym == XK_Up)
-        move_player(game, 0, -1);
+        move_player(game, 0, -1, i);
     else if (keysym == XK_s || keysym == XK_S || keysym == XK_Down)
-        move_player(game, 0, 1);
+        move_player(game, 0, 1, i);
     else if (keysym == XK_a || keysym == XK_A || keysym == XK_Left)
-        move_player(game, -1, 0);
+        move_player(game, -1, 0, i);
     else if (keysym == XK_d || keysym == XK_D || keysym == XK_Right)
-        move_player(game, 1, 0);
+        move_player(game, 1, 0, i);
     return (0);
 }
 void print_on_terminal(t_game *game)
@@ -166,19 +168,14 @@ void print_on_terminal(t_game *game)
 }
 
 // Move player function
-void move_player(t_game *game, int dx, int dy)
+int move_player_help(t_game *game, int new_x, int new_y)
 {
-    int new_x;
-    int new_y;
-
-	new_x = game->map.player_x + dx;
-	new_y = game->map.player_y + dy;	
-    if (game->map.map[new_y][new_x] == '1')
-        return;
+	if (game->map.map[new_y][new_x] == '1')
+        return 1;
     if (game->map.map[new_y][new_x] == 'E' && game->map.collectibles > 0)
     {
         write(1, "Collect all collectibles before exiting!\n", 41);
-        return;
+        return 1;
     }
     if (game->map.map[new_y][new_x] == 'E' && game->map.collectibles == 0)
     {
@@ -191,7 +188,18 @@ void move_player(t_game *game, int dx, int dy)
         game->map.collectibles--;
         game->map.map[new_y][new_x] = '0';
     }
-    for (int i = 0; i < game->num_enemies; i++)
+	return 0;
+}
+void move_player(t_game *game, int dx, int dy, int i)
+{
+    int new_x;
+    int new_y;
+
+    new_x = game->map.player_x + dx;
+    new_y = game->map.player_y + dy;
+    if (move_player_help(game, new_x, new_y))
+        return;
+    while (i < game->num_enemies)
     {
         if (new_x == game->enemies[i].x && new_y == game->enemies[i].y)
         {
@@ -199,13 +207,14 @@ void move_player(t_game *game, int dx, int dy)
             cleanup_game(game);
             exit(0);
         }
+        i++;
     }
     game->map.map[game->map.player_y][game->map.player_x] = '0';
     game->map.map[new_y][new_x] = 'P';
     game->map.player_x = new_x;
     game->map.player_y = new_y;
     game->move_count++;
-	print_on_terminal(game);
+    print_on_terminal(game);
     render_map(game);
 }
 
@@ -339,7 +348,6 @@ void cleanup_game(t_game *game)
     }
 }
 
-// Handle window close event
 int handle_close(t_game *game)
 {
     cleanup_game(game);
@@ -349,27 +357,19 @@ int handle_close(t_game *game)
 
 int game_loop(t_game *game)
 {
-
-    // Increment the frame counter
     game->frame_counter++;
-
-    // Update the current frame for animation only after FRAME_DELAY iterations
     if (game->frame_counter >= FRAME_DELAY)
     {
         game->current_frame = (game->current_frame + 1) % NUM_COLLECTIBLE_FRAMES;
         game->frame_counter = 0; // Reset the frame counter
     }
-
-    // Move enemies only after a certain number of iterations
     static int enemy_move_counter = 0;
     enemy_move_counter++;
     if (enemy_move_counter >= ENEMY_MOVE_DELAY)
     {
         move_enemies(game);
-        enemy_move_counter = 0; // Reset the enemy move counter
+        enemy_move_counter = 0;
     }
- 
-    // Render the map with the updated frame
     render_map(game);
 
     return (0);
@@ -377,7 +377,9 @@ int game_loop(t_game *game)
 
 int load_map2(char *filename, t_game *game)
 {
-    int fd = open(filename, O_RDONLY);
+    int	fd;
+	
+	fd = open(filename, O_RDONLY);
     if (fd < 0)
         return (0);
 
@@ -447,6 +449,7 @@ int load_map2(char *filename, t_game *game)
     }
     return (1);
 }
+
 void error_handel(char *av, t_map *data)
 {
     int i;
