@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:44:56 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/29 10:07:49 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/30 10:21:36 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,17 @@ void init_game(t_game *game)
 {
     int window_width;
     int window_height;
-
-    // Initialize the MiniLibX instance
     game->mlx = mlx_init();
     if (!game->mlx)
     {
         write(2, "Error initializing MLX\n", 23);
         exit(1);
     }
-
-    // ------------------------------------------------------------------------
-    // Add a move counter and set it to zero at the beginning of the game.
-    // Make sure you've added an 'int move_count;' field to the t_game struct
-    // in so_long.h for this to compile without errors.
-    // ------------------------------------------------------------------------
     game->move_count = 0;
-    game->current_frame = 0; // Initialize the current frame index
-    game->frame_counter = 0; // Initialize the frame counter
-
-    // Calculate window dimensions based on the map size
+    game->current_frame = 0;
+    game->frame_counter = 0;
     window_width = game->map.width * TILE_SIZE;
     window_height = game->map.height * TILE_SIZE;
-
-    // Create the game window
     game->win = mlx_new_window(game->mlx, window_width, window_height, "so_long");
     if (!game->win)
     {
@@ -53,13 +41,15 @@ void init_images_helper(t_game *game, int img_width, int img_height, char *colle
     int i;
 
     i = 0;
-    while (i < NUM_COLLECTIBLE_FRAMES) {
-        game->img_collectibles[i] = mlx_xpm_file_to_image(game->mlx, collectible_paths[i], &img_width, &img_height);
-        if (!game->img_collectibles[i]) {
-            write(2, "Error loading collectible images\n", 33);
-            exit(1);
-        }
-        i++;
+    while (i < NUM_COLLECTIBLE_FRAMES)
+    {
+    game->img_collectibles[i] = mlx_xpm_file_to_image(game->mlx, collectible_paths[i], &img_width, &img_height);
+    if (!game->img_collectibles[i])
+    {
+    write(2, "Error loading collectible images\n", 33);
+    exit(1);
+    }
+    i++;
     }
 }
 
@@ -90,7 +80,8 @@ void init_images(t_game *game)
 }
 
 // Render the map and objects
-void draw_map(t_game *game, int x, int y, int screen_x, int screen_y) {
+void draw_map(t_game *game, int x, int y, int screen_x, int screen_y)
+{
     mlx_put_image_to_window(game->mlx, game->win, game->img_floor, screen_x, screen_y);
     if (game->map.map[y][x] == '1')
         mlx_put_image_to_window(game->mlx, game->win, game->img_wall, screen_x, screen_y);
@@ -101,14 +92,18 @@ void draw_map(t_game *game, int x, int y, int screen_x, int screen_y) {
     if (game->map.map[y][x] == 'P')
         mlx_put_image_to_window(game->mlx, game->win, game->img_player, screen_x, screen_y);
 }
+
 void draw_enemies(t_game *game)
 {
-    int i = 0;
-    while (i < game->num_enemies) {
-        int screen_x = game->enemies[i].x * TILE_SIZE;
-        int screen_y = game->enemies[i].y * TILE_SIZE;
-        mlx_put_image_to_window(game->mlx, game->win, game->img_enemy, screen_x, screen_y);
-        i++;
+	int i = 0;
+    while (i < game->num_enemies)
+    {
+		int screen_x;
+		int screen_y;
+		screen_x = game->enemies[i].x * TILE_SIZE;
+		screen_y = game->enemies[i].y * TILE_SIZE;
+		mlx_put_image_to_window(game->mlx, game->win, game->img_enemy, screen_x, screen_y);
+		i++;
     }
 }
 void render_map(t_game *game)
@@ -117,13 +112,16 @@ void render_map(t_game *game)
     int y;
     int i;
     char    *moves_str;
+    
     y = 0;
-    while (y < game->map.height) {
+    while (y < game->map.height)
+    {
         x = 0;
-        while (x < game->map.width) {
+        while (x < game->map.width)
+        {
             int screen_x;
             int screen_y;
-
+            
             screen_x = x * TILE_SIZE;
             screen_y = y * TILE_SIZE;
             draw_map(game, x, y, screen_x, screen_y);
@@ -282,7 +280,6 @@ void move_enemies(t_game *game)
     }
 }
 
-
 // Clean up resources
 void cleanup_game(t_game *game)
 {
@@ -324,18 +321,15 @@ void cleanup_game(t_game *game)
         mlx_destroy_window(game->mlx, game->win);
         game->win = NULL;
     }
-//#ifdef __linux__
     if (game->mlx)
     {
         mlx_destroy_display(game->mlx);
     }
-//#endif
     if (game->mlx)
     {
         free(game->mlx);
         game->mlx = NULL;
     }
-
     if (game->map.map)
     {
         free_map(game->map.map, game->map.height);
@@ -351,9 +345,9 @@ int handle_close(t_game *game)
     return (0);
 }
 
-// Optional game loop function
 int game_loop(t_game *game)
 {
+
     // Increment the frame counter
     game->frame_counter++;
 

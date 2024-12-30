@@ -45,7 +45,6 @@ typedef struct s_game
     int     num_enemies;
     void    *img_wall;
     void    *img_floor;
-    //void    *img_gold;////////////////////////////////
     void    *img_player;
     void    *img_exit;
     void    *img_collectibles[NUM_COLLECTIBLE_FRAMES]; // Array of collectible frames
