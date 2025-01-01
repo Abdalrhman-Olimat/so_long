@@ -1,9 +1,9 @@
 NAME = test
-CC = gcc
-#CFLAG = -Wall -Werror -Wextra -g -fsanitize=leak
+CC = cc
+CFLAG = -Wall -Werror -Wextra
 SRC_PATH = src/
 OBJ_PATH = obj/
-SRC = test.c get_next_line.c get_next_line_utils.c map_error.c map_error2.c file_error.c load_map.c flood_file.c
+SRC = test.c get_next_line.c get_next_line_utils.c map_error.c map_error2.c file_error.c load_map.c flood_file.c enemie.c init.c movement.c render_loop.c
 LIBFT = Libft/libft.a
 INCS	= -I ./include/
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))

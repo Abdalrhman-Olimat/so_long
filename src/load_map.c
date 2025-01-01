@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 19:38:11 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/01 07:44:38 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/01 07:49:54 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ int	get_map_height(char *filename)
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (0);
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line)
 	{
 		height++;
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (height);
@@ -41,6 +43,9 @@ int	allocate_map(t_map *data)
 
 int	process_line(char *line, int i, t_map *data, int *player_found)
 {
+	int	j;
+
+	j = 0;
 	if (i == 0)
 		data->width = ft_strlen(line) - 1;
 	else if (ft_strlen(line) - 1 != data->width)
@@ -48,7 +53,7 @@ int	process_line(char *line, int i, t_map *data, int *player_found)
 		write(2, "Error: inconsistent map width\n", 30);
 		return (0);
 	}
-	for (int j = 0; line[j] && line[j] != '\n'; j++)
+	while (line[j] && line[j] != '\n')
 	{
 		if (line[j] == 'P')
 		{
@@ -58,6 +63,7 @@ int	process_line(char *line, int i, t_map *data, int *player_found)
 		}
 		else if (line[j] == 'C')
 			data->collectibles++;
+		j++;
 	}
 	return (1);
 }
@@ -74,7 +80,8 @@ int	process_map_lines(char *filename, t_map *data)
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (0);
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line)
 	{
 		data->map[i] = line;
 		if (!process_line(line, i, data, &player_found))
@@ -83,6 +90,7 @@ int	process_map_lines(char *filename, t_map *data)
 			return (0);
 		}
 		i++;
+		line = get_next_line(fd);
 	}
 	data->map[i] = NULL;
 	close(fd);

@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:02:22 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/30 13:11:41 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/01 07:55:42 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,17 @@ void	process_lines(int fd, int length, int *flag)
 	char	*line;
 	char	*last_line;
 
-	line = NULL;
+	line = get_next_line(fd);
+	if (!line)
+		return ;
 	last_line = NULL;
-	while ((line = get_next_line(fd)) != NULL)
+	while (line)
 	{
 		if (last_line)
 			free(last_line);
 		last_line = line;
 		map_wall_side(line, length, flag);
+		line = get_next_line(fd);
 	}
 	if (last_line)
 	{
