@@ -6,13 +6,12 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:44:56 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/30 11:54:05 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/01 06:39:32 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/home/abdalrhman/so_long/include/so_long.h"
+#include "../include/so_long.h"
 
-// Initialize the game and create the window
 void init_game(t_game *game)
 {
     int window_width;
@@ -288,9 +287,6 @@ void move_enemies(t_game *game)
     }
 }
 
-
-
-
 // Clean up resources
 void cleanup_game(t_game *game)
 {
@@ -464,8 +460,7 @@ void error_handel(char *av, t_map *data)
         write(2, "Error loading map\n", 18);
         exit (1);
     }
-    i = check_path(data->map, data->height, data->width,
-                   data->player_x, data->player_y, data->collectibles);
+    i = check_path(data);
     free_map(data->map, data->height);
     if (i == 0)
         exit (1);

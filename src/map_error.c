@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:02:22 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/17 19:03:57 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/30 13:11:41 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	check_up_wall(char *line, int length, int *flag)
 		i++;
 	}
 }
-
 
 void	map_wall_side(char *line, int length, int *flag)
 {
@@ -56,7 +55,7 @@ void	map_wall_bottom(char *line, int length, int *flag)
 	}
 }
 
-void    process_lines(int fd, int length, int *flag)
+void	process_lines(int fd, int length, int *flag)
 {
 	char	*line;
 	char	*last_line;
@@ -76,12 +75,13 @@ void    process_lines(int fd, int length, int *flag)
 		free(last_line);
 	}
 }
+
 void	map_wall_main(char *av)
 {
-	int	fd;
-	int	flag;
-	int	length;
-	char		*line;
+	int		fd;
+	int		flag;
+	int		length;
+	char	*line;
 
 	flag = 0;
 	fd = open(av, O_RDONLY);

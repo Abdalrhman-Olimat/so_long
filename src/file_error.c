@@ -6,18 +6,18 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:02:44 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/17 19:03:36 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/30 12:46:00 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/so_long.h"
+#include "../include/so_long.h"
 
 void	cheack_name(char *av)
 {
-	int	fd;
-	int	length;
-	int	j;
-	char		*bar;
+	int		fd;
+	int		length;
+	int		j;
+	char	*bar;
 
 	fd = open(av, O_RDONLY);
 	close(fd);
@@ -41,9 +41,9 @@ void	cheack_name(char *av)
 
 void	cheack_empty(char *av)
 {
-	int	fd;
-	int	byte_read;
-	char			*buffer;
+	char	*buffer;
+	int		fd;
+	int		byte_read;
 
 	fd = open(av, O_RDONLY);
 	buffer = malloc(sizeof(char));

@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 07:05:09 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/18 12:49:59 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/01 07:41:18 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	**copy_map(char **map, int height)
 {
-	int	i;
+	int		i;
 	char	**copy;
-	
+
 	copy = malloc(sizeof(char *) * (height + 1));
 	i = 0;
 	while (i < height)
@@ -31,7 +31,7 @@ char	**copy_map(char **map, int height)
 void	free_map(char **map, int height)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < height)
 	{
@@ -41,38 +41,45 @@ void	free_map(char **map, int height)
 	free(map);
 }
 
-void	flood_fill(char **map, int x, int y, int *collectibles, int *exit_found)
+static	void	flood_fill_loop(t_map *mp, int x, int y)
 {
-	if (map[x][y] == '1' || map[x][y] == 'F')
-		return;
-	if (map[x][y] == 'C')
-		(*collectibles)--;
-	if (map[x][y] == 'E')
-		*exit_found = 1;
-	map[x][y] = 'F';
+	if (mp->map[x][y] == '1' || mp->map[x][y] == 'F')
+		return ;
+	if (mp->map[x][y] == 'C')
+		mp->collectibles--;
+	if (mp->map[x][y] == 'E')
+		mp->exit_found = 1;
+	mp->map[x][y] = 'F';
 	if (x > 0)
-		flood_fill(map, x - 1, y, collectibles, exit_found);
-	if (map[x + 1])
-		flood_fill(map, x + 1, y, collectibles, exit_found);
+		flood_fill_loop(mp, x - 1, y);
+	if (x < mp->height - 1)
+		flood_fill_loop(mp, x + 1, y);
 	if (y > 0)
-		flood_fill(map, x, y - 1, collectibles, exit_found);
-	if (map[x][y + 1])
-		flood_fill(map, x, y + 1, collectibles, exit_found);
+		flood_fill_loop(mp, x, y - 1);
+	if (y < mp->width - 1)
+		flood_fill_loop(mp, x, y + 1);
 }
 
-int check_path(char **map, int height, int width, int player_x, int player_y, int collectibles)
+void	flood_fill(t_map *mp, char **map_copy)
 {
-    int exit_found;
-    char **map_copy;
+	t_map	tmp;
 
-	exit_found = 0;
-    map_copy = copy_map(map, height);
-    flood_fill(map_copy, player_x, player_y, &collectibles, &exit_found);
-    free_map(map_copy, height);
+	tmp = *mp;
+	tmp.map = map_copy;
+	flood_fill_loop(&tmp, tmp.player_x, tmp.player_y);
+	mp->collectibles = tmp.collectibles;
+	mp->exit_found = tmp.exit_found;
+}
 
-    if (collectibles == 0 && exit_found)
-        return (1);
+int	check_path(t_map *data)
+{
+	char	**map_copy;
 
-    write(2, "Map is invalid: unreachable collectibles or exit\n", 49);
-    return (0);
+	map_copy = copy_map(data->map, data->height);
+	flood_fill(data, map_copy);
+	free_map(map_copy, data->height);
+	if (data->collectibles == 0 && data->exit_found)
+		return (1);
+	write(2, "Map is invalid: unreachable collectibles or exit\n", 49);
+	return (0);
 }

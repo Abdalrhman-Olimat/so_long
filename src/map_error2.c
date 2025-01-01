@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:09:53 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/17 19:04:01 by aeleimat         ###   ########.fr       */
+/*   Updated: 2024/12/30 13:24:06 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	map_rectangular(char *av)
 {
-	int	fd;
-	int	length;
-	int	length2;
-	char		*line;
+	int		fd;
+	int		length;
+	int		length2;
+	char	*line;
 
 	fd = open(av, O_RDONLY);
 	line = get_next_line(fd);
@@ -38,10 +38,11 @@ void	map_rectangular(char *av)
 	free(line);
 	close(fd);
 }
-void process_lines_e_p_c(int fd, int length, int *e, int *p, int *c, int *o)
+
+void	process_lines_e_p_c(int fd, int length, int *e, int *p, int *c, int *o)
 {
-    int i;
-    char *line;
+    int		i;
+    char	*line;
 
     while ((line = get_next_line(fd)) != NULL)
     {
@@ -62,15 +63,15 @@ void process_lines_e_p_c(int fd, int length, int *e, int *p, int *c, int *o)
     }
 }
 
-void count_e_p_c(char *av)
+void	count_e_p_c(char *av)
 {
-	int	fd;
-	int	length;
-	int	e_count;
-	int	p_count;
-	int	c_count;
-	int	i;
-	int	o_count;
+	int			fd;
+	int			length;
+	int			e_count;
+	int			p_count;
+	int			c_count;
+	int			i;
+	int			o_count;
 	char		*line;
 
 	e_count = 0;
@@ -83,9 +84,9 @@ void count_e_p_c(char *av)
 	free(line);
 	process_lines_e_p_c(fd, length, &e_count, &p_count, &c_count, &o_count);
 	close(fd);
-	if(e_count!= 1 || p_count!= 1 || c_count <= 0 || o_count != 0)
+	if (e_count!= 1 || p_count!= 1 || c_count <= 0 || o_count != 0)
 	{
-		write(2,"Error: there should be exactly one 'E' and one 'p' and at least one 'C' and nothing else\n",88);
-		exit(1);
+		write (2,"Error: there should be exactly one 'E' and one 'p' and at least one 'C'and nothing else\n",87);
+		exit (1);
 	}
 }
