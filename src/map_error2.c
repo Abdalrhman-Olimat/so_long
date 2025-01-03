@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:09:53 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/01 09:07:43 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:47:01 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	exit_error(int fd, char *line)
 void	map_rectangular(char *av)
 {
 	int		fd;
+	int		flag;
 	int		length;
 	int		length2;
 	char	*line;
@@ -30,16 +31,19 @@ void	map_rectangular(char *av)
 	fd = open(av, O_RDONLY);
 	line = get_next_line(fd);
 	length = ft_strlen(line);
+	flag = 0;
 	free(line);
 	line = get_next_line(fd);
 	while (line)
 	{
 		length2 = ft_strlen(line);
 		if (length != length2)
-			exit_error(fd, line);
+			flag = 1;
 		free(line);
 		line = get_next_line(fd);
 	}
+	if (flag)
+		exit_error(fd, line);
 	free(line);
 	close(fd);
 }

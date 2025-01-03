@@ -48,8 +48,8 @@ typedef struct s_game
     void    *img_floor;
     void    *img_player;
     void    *img_exit;
-    void    *img_collectibles[NUM_COLLECTIBLE_FRAMES]; // Array of collectible frames
-    void    *img_enemy; // Enemy image
+    void    *img_coll[NUM_COLLECTIBLE_FRAMES]; // Array of collectible frames
+    void    *img_ene; // Enemy image
     int     current_frame; // Current frame index for animation
     int     frame_counter; // Frame counter for controlling animation speed
     int     move_count; // Move counter
@@ -79,7 +79,7 @@ char	*get_next_line(int fd);
 
 /**********************init **************/
 void init_game(t_game *game);
-void init_images_helper(t_game *game, int img_width, int img_height, char *collectible_paths[]);
+void init_c(t_game *game, int img_width, int img_height, char *collectible_paths[]);
 void init_images(t_game *game);
 void draw_map(t_game *game, int x, int y, int screen_x, int screen_y);
 void draw_enemies(t_game *game);
