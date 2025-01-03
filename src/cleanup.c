@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 05:44:35 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/03 17:08:50 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/04 02:32:34 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	cleanup_game(t_game *game)
 
 	i = 0;
 	cleanup_game_help1(game);
-	while (i < NUM_COLLECTIBLE_FRAMES)
+	while (i < NUM_C_FRAMES)
 	{
 		if (game->img_coll[i])
 		{

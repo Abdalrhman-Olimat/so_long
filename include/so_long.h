@@ -6,7 +6,7 @@
 # endif
 
 # define TILE_SIZE 65
-# define NUM_COLLECTIBLE_FRAMES 6 // Number of frames for the collectible animation
+# define NUM_C_FRAMES 6 // Number of frames for the collectible animation
 # define FRAME_DELAY 33 // Number of game loop iterations per frame change
 # define ENEMY_MOVE_DELAY 70 // Number of game loop iterations per enemy move
 # define MAX_ENEMIES 10000 // Maximum number of enemies
@@ -48,7 +48,7 @@ typedef struct s_game
     void    *img_floor;
     void    *img_player;
     void    *img_exit;
-    void    *img_coll[NUM_COLLECTIBLE_FRAMES]; // Array of collectible frames
+    void    *img_coll[NUM_C_FRAMES]; // Array of collectible frames
     void    *img_ene; // Enemy image
     int     current_frame; // Current frame index for animation
     int     frame_counter; // Frame counter for controlling animation speed

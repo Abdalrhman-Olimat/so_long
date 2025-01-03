@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 11:18:12 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/03 17:15:13 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/04 02:32:23 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	init_c(t_game *game, int img_w, int img_h, char *c_p[])
 	int	i;
 
 	i = 0;
-	while (i < NUM_COLLECTIBLE_FRAMES)
+	while (i < NUM_C_FRAMES)
 	{
 		game->img_coll[i] = mlx_xpm_file_to_image(game->mlx, c_p[i], &img_w, &img_h);
 		if (!game->img_coll[i])
@@ -57,7 +57,7 @@ void	init_images(t_game *game)
 {
 	int		img_width;
 	int		img_height;
-	char	*collectible_paths[NUM_COLLECTIBLE_FRAMES] =
+	char	*collectible_paths[NUM_C_FRAMES] =
 	{
 		"image/collectible/gold2.xpm",
 		"image/collectible/gold3.xpm",
