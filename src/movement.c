@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 11:22:17 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/04 02:11:39 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/04 02:17:20 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ int	is_valid_enemy_move(t_game *game, int new_x, int new_y, int enemy_index)
 {
 	int	j;
 
-	if (new_x < 0 || new_x >= game->map.width || new_y < 0 || new_y >= game->map.height)
+	if (new_x < 0 || new_x >= game->map.width || new_y < 0
+		|| new_y >= game->map.height)
 		return (0);
 	if (game->map.map[new_y][new_x] == '1' ||
 		game->map.map[new_y][new_x] == 'C' ||
@@ -115,7 +116,8 @@ int	is_valid_enemy_move(t_game *game, int new_x, int new_y, int enemy_index)
 	j = 0;
 	while (j < game->num_enemies)
 	{
-		if (j != enemy_index && game->enemies[j].x == new_x && game->enemies[j].y == new_y)
+		if (j != enemy_index && game->enemies[j].x == new_x
+			&& game->enemies[j].y == new_y)
 			return (0);
 		j++;
 	}
