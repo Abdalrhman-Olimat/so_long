@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 11:22:17 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/03 05:52:33 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/04 02:11:39 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	handle_keypress(int keysym, t_game *game)
 {
 	int	i;
-	
+
 	i = 0;
 	if (keysym == XK_Escape)
 	{
@@ -32,10 +32,11 @@ int	handle_keypress(int keysym, t_game *game)
 		move_player(game, 1, 0, i);
 	return (0);
 }
-void print_on_terminal(t_game *game)
+
+void	print_on_terminal(t_game *game)
 {
-	char *move_str;
-	
+	char	*move_str;
+
 	move_str = ft_itoa(game->move_count);
 	write(1, "Moves: ", 7);
 	write(1, move_str, ft_strlen(move_str));
@@ -44,14 +45,14 @@ void print_on_terminal(t_game *game)
 }
 
 // Move player function
-int move_player_help(t_game *game, int new_x, int new_y)
+int	move_player_help(t_game *game, int new_x, int new_y)
 {
 	if (game->map.map[new_y][new_x] == '1')
-		return 1;
+		return (1);
 	if (game->map.map[new_y][new_x] == 'E' && game->map.collectibles > 0)
 	{
 		write(1, "Collect all collectibles before exiting!\n", 41);
-		return 1;
+		return (1);
 	}
 	if (game->map.map[new_y][new_x] == 'E' && game->map.collectibles == 0)
 	{
@@ -64,18 +65,18 @@ int move_player_help(t_game *game, int new_x, int new_y)
 		game->map.collectibles--;
 		game->map.map[new_y][new_x] = '0';
 	}
-	return 0;
+	return (0);
 }
 
-void move_player(t_game *game, int dx, int dy, int i)
+void	move_player(t_game *game, int dx, int dy, int i)
 {
-	int new_x;
-	int new_y;
+	int	new_x;
+	int	new_y;
 
 	new_x = game->map.player_x + dx;
 	new_y = game->map.player_y + dy;
 	if (move_player_help(game, new_x, new_y))
-		return;
+		return ;
 	while (i < game->num_enemies)
 	{
 		if (new_x == game->enemies[i].x && new_y == game->enemies[i].y)
@@ -97,27 +98,26 @@ void move_player(t_game *game, int dx, int dy, int i)
 
 int	is_valid_enemy_move(t_game *game, int new_x, int new_y, int enemy_index)
 {
-	if (new_x < 0 || new_x >= game->map.width ||
-		new_y < 0 || new_y >= game->map.height)
-		return 0;
+	int	j;
+
+	if (new_x < 0 || new_x >= game->map.width || new_y < 0 || new_y >= game->map.height)
+		return (0);
 	if (game->map.map[new_y][new_x] == '1' ||
 		game->map.map[new_y][new_x] == 'C' ||
 		game->map.map[new_y][new_x] == 'E')
-		return 0;
+		return (0);
 	if (new_x == game->map.player_x && new_y == game->map.player_y)
 	{
 		write(1, "You were caught by an enemy!\n", 29);
 		cleanup_game(game);
 		exit(0);
 	}
-	int j;
-	
 	j = 0;
 	while (j < game->num_enemies)
 	{
 		if (j != enemy_index && game->enemies[j].x == new_x && game->enemies[j].y == new_y)
-			return 0;
+			return (0);
 		j++;
 	}
-	return 1;
+	return (1);
 }
