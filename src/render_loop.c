@@ -6,19 +6,19 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 11:28:22 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/03 05:51:29 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/04 02:20:13 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/so_long.h"
 
-void render_map(t_game *game)
+void	render_map(t_game *game)
 {
-	int x;
-	int y;
-	int i;
-	char    *moves_str;
-	
+	int		x;
+	int		y;
+	int		i;
+	char	*moves_str;
+
 	y = 0;
 	while (y < game->map.height)
 	{
