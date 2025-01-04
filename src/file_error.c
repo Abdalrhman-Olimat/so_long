@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:02:44 by aeleimat          #+#    #+#             */
-/*   Updated: 2024/12/30 12:46:00 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/04 03:05:41 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,10 @@ void	cheack_empty(char *av)
 		write(2, "File is empty\n", 14);
 		exit(1);
 	}
+}
+
+void	error_loding(void)
+{
+	write(2, "Error loading images\n", 21);
+	exit(1);
 }

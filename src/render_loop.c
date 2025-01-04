@@ -6,7 +6,7 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 11:28:22 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/04 02:35:35 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/04 03:00:34 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	render_map(t_game *game)
 	int		x;
 	int		y;
 	int		i;
-	int		screen_y;
-	int		screen_x;
 	char	*moves_str;
 
 	y = 0;
@@ -27,9 +25,9 @@ void	render_map(t_game *game)
 		x = 0;
 		while (x < game->map.width)
 		{
-			screen_x = x * TILE_SIZE;
-			screen_y = y * TILE_SIZE;
-			draw_map(game, x, y, screen_x, screen_y);
+			game->screen_x = x * TILE_SIZE;
+			game->screen_y = y * TILE_SIZE;
+			draw_map(game, x, y);
 			x++;
 		}
 		y++;

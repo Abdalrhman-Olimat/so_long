@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/04 03:57:12 by aeleimat          #+#    #+#             */
+/*   Updated: 2025/01/04 03:57:26 by aeleimat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
@@ -22,37 +34,39 @@
 
 typedef struct s_map
 {
-    char    **map;
-    int     width;
-    int     height;
-    int     player_x;
-    int     player_y;
-    int     collectibles;
-    int     exit_found;
+	char    **map;
+	int     width;
+	int     height;
+	int     player_x;
+	int     player_y;
+	int     collectibles;
+	int     exit_found;
 }   t_map;
 
 typedef struct s_enemy
 {
-    int x;
-    int y;
+	int x;
+	int y;
 }   t_enemy;
 
 typedef struct s_game
 {
-    void    *mlx;
-    void    *win;
-    t_map   map;
-    t_enemy enemies[MAX_ENEMIES];
-    int     num_enemies;
-    void    *img_wall;
-    void    *img_floor;
-    void    *img_player;
-    void    *img_exit;
-    void    *img_coll[NUM_C_FRAMES]; // Array of collectible frames
-    void    *img_ene; // Enemy image
-    int     current_frame; // Current frame index for animation
-    int     frame_counter; // Frame counter for controlling animation speed
-    int     move_count; // Move counter
+	void    *mlx;
+	void    *win;
+	t_map   map;
+	t_enemy enemies[MAX_ENEMIES];
+	int     num_enemies;
+	void    *img_wall;
+	void    *img_floor;
+	void    *img_player;
+	void    *img_exit;
+	void    *img_coll[NUM_C_FRAMES]; // Array of collectible frames
+	void    *img_ene; // Enemy image
+	int     current_frame; // Current frame index for animation
+	int     frame_counter; // Frame counter for controlling animation speed
+	int     move_count; // Move counter
+	int		screen_y;
+	int		screen_x;
 }   t_game;
 
 // Function prototypes
@@ -81,7 +95,7 @@ char	*get_next_line(int fd);
 void init_game(t_game *game);
 void init_c(t_game *game, int img_width, int img_height, char *collectible_paths[]);
 void init_images(t_game *game);
-void draw_map(t_game *game, int x, int y, int screen_x, int screen_y);
+void draw_map(t_game *game, int x, int y);
 void draw_enemies(t_game *game);
 
 /**********************movement **************/
@@ -99,4 +113,10 @@ int game_loop(t_game *game);
 int handle_close(t_game *game);
 void render_map(t_game *game);
 
+/**************load_map2help*******************/
+int	process_line3(char *line);
+int	process_line2(t_game *game, char *line);
+int	scan_map_for_obj(t_game *game);
+void	player_pos(t_game *game, int x, int y);
+void	enemy_pos(t_game *game, int x, int y);
 #endif
