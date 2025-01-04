@@ -6,12 +6,14 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 04:31:08 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/04 04:33:24 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/04 04:37:15 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
 # define STRUCT_H
+
+# include "so_long.h"
 
 typedef struct s_map
 {

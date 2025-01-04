@@ -27,8 +27,11 @@ $(NAME): $(OBJS) $(LIBFT)
 $(LIBFT):
 	make -C Libft  
 
-c:
+clean:
 	rm -rf $(OBJ_PATH) $(NAME)
+	make clean -C Libft
+fclean: clean
+	rm -rf $(NAME)
 	make fclean -C Libft
 
-re: c all
+re: fclean all
