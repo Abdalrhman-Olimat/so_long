@@ -6,11 +6,11 @@
 /*   By: aeleimat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:25:51 by aeleimat          #+#    #+#             */
-/*   Updated: 2025/01/04 04:02:06 by aeleimat         ###   ########.fr       */
+/*   Updated: 2025/01/04 04:07:31 by aeleimat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef MAP_ERROR_H
+#ifndef MAP_ERROR_H
 # define MAP_ERROR_H
 # include "so_long.h"
 
@@ -36,4 +36,4 @@ void	free_map(char **map, int height);
 char	**copy_map(char **map, int height);
 int		load_map(char *filename, t_map *data);
 //int load_map2(char *filename, t_game *game);
-# endif
+#endif
